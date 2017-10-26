@@ -1,0 +1,9 @@
+FROM microsoft/dotnet:2.0.0-sdk-2.0.2-jessie
+ARG EXE_DIR=.
+WORKDIR /app/
+COPY $EXE_DIR/ ./
+
+RUN apt-get update
+WORKDIR /app/
+
+CMD ["dotnet", "aspnet-docker-webhost.dll"]
