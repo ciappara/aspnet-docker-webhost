@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Net;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
+using System.IO;
 
 namespace aspnet_docker_webhost
 {
@@ -28,33 +28,57 @@ namespace aspnet_docker_webhost
         }
     }
     
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            var webHost = new WebHostBuilder()
-                .UseShutdownTimeout(TimeSpan.FromMilliseconds(500))
-                .UseKestrel(SetServerOptions)
-                .UseStartup<Startup>()
-                .Build();
-
             try
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Starting up!");
-                webHost.Run();
+                BuildWebHost(args).Run();
             }
             catch (Exception ex)
             {
                 Console.WriteLine("ERR:" + ex.Message);
             }
         }
-        
-        private static void SetServerOptions(KestrelServerOptions options)
-        {
-            options.Listen(IPAddress.Loopback, 36098, listenOptions =>
-            {
-            });
-        }
+
+        //https://docs.microsoft.com/en-us/aspnet/core/fundamentals/hosting?tabs=aspnetcore2x
+        public static IWebHost BuildWebHost(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseUrls("http://*:36098")
+                .UseStartup<Startup>()
+                .Build();
     }
 }
+
+//https://github.com/aspnet/KestrelHttpServer/issues/639
+//public static void Main(string[] args)
+//{
+//    var host = new WebHostBuilder()
+//        .UseServer("Microsoft.AspNetCore.Server.Kestrel")
+//        .UseApplicationBasePath(Directory.GetCurrentDirectory())
+//        .UseDefaultConfiguration(args)
+//        .UseIISPlatformHandlerUrl()
+//        .UseStartup<Startup>()
+//        .UseUrls("http://localhost:5050")
+//        .Build();
+
+//    host.Run();
+
+
+//BuildWebHost(args).Run();
+
+//var webHost = new WebHostBuilder()
+//    //.UseShutdownTimeout(TimeSpan.FromMilliseconds(500))
+//    .UseKestrel(SetServerOptions)
+//    .UseContentRoot(Directory.GetCurrentDirectory())
+//    .UseUrls("http://*:36098")
+//    //.UseIISIntegration()
+//    .UseStartup<Startup>()
+//    .Build();
+
+//}
