@@ -1,11 +1,11 @@
 ﻿FROM microsoft/dotnet:latest
 
 # Create directory from the app source code
-RUN MKDIR -p /app
-WORKDIR /app
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
 # Copy source code and restore dependencies
-COPY . /app
+COPY . /usr/src/app
 RUN dotnet restore
 
 # Expose the port and start app
