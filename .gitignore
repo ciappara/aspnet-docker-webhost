@@ -1,3 +1,5 @@
 .vs/aspnet-docker-webhost/v15/sqlite3/storage.ide
 .vs/aspnet-docker-webhost/v15/.suo
 aspnet-docker-webhost/obj/
+.vs/
+aspnet-docker-webhost/bin/
