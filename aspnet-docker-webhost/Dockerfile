@@ -9,5 +9,5 @@ COPY . /usr/src/app
 RUN dotnet restore
 
 # Expose the port and start app
-EXPOSE 36098
+EXPOSE 35035
 CMD [ "dotnet", "run" ]

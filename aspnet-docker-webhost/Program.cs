@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using System.Net;
 
 namespace aspnet_docker_webhost
 {
@@ -47,37 +49,16 @@ namespace aspnet_docker_webhost
         //https://docs.microsoft.com/en-us/aspnet/core/fundamentals/hosting?tabs=aspnetcore2x
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseKestrel()
+                .UseKestrel(SetServerOptions)
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseUrls("http://*:36098")
+                .UseUrls("http://*:35035")
                 .UseStartup<Startup>()
                 .Build();
+        
+        private static void SetServerOptions(KestrelServerOptions options)
+        {
+            var port = 35035;
+            options.Listen(IPAddress.Any, port);
+        }
     }
 }
-
-//https://github.com/aspnet/KestrelHttpServer/issues/639
-//public static void Main(string[] args)
-//{
-//    var host = new WebHostBuilder()
-//        .UseServer("Microsoft.AspNetCore.Server.Kestrel")
-//        .UseApplicationBasePath(Directory.GetCurrentDirectory())
-//        .UseDefaultConfiguration(args)
-//        .UseIISPlatformHandlerUrl()
-//        .UseStartup<Startup>()
-//        .UseUrls("http://localhost:5050")
-//        .Build();
-
-//    host.Run();
-
-
-//BuildWebHost(args).Run();
-
-//var webHost = new WebHostBuilder()
-//    //.UseShutdownTimeout(TimeSpan.FromMilliseconds(500))
-//    .UseKestrel(SetServerOptions)
-//    .UseContentRoot(Directory.GetCurrentDirectory())
-//    .UseUrls("http://*:36098")
-//    //.UseIISIntegration()
-//    .UseStartup<Startup>()
-//    .Build();
-//}

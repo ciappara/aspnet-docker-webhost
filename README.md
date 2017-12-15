@@ -26,5 +26,5 @@ docker rm -f aspnet-docker-webhost
 Finally run the docker image, and you should be able to successfully run the webhost. By using the -p you can expose the port set in the UseUrls portion:
 
 ```
-docker run -it -p 36098:36098 --name aspnet-docker-webhost localhost:5000/aspnet-docker-webhost
+docker run -it -p 35035:35035 --name aspnet-docker-webhost localhost:5000/aspnet-docker-webhost
 ```
